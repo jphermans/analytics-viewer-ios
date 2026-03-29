@@ -4,13 +4,32 @@ A professional iOS app built with **Capacitor + Vue 3 + Vite** that parses and s
 
 ## Features
 
+### Core Functionality
 - **📄 File Reception** — Open `.ips` files via Share Sheet or "Open In" from any app
+- **🔐 Secure File Access** — Uses iOS security-scoped resources for Files app integration
 - **📋 Overview Dashboard** — Key metrics, device info, quick summary cards
 - **📁 Category Browser** — Events grouped into 13+ categories with visual breakdowns
-- **🔍 Event Search** — Search through 168+ unique event types
-- **🗂️ File Info** — Raw metadata viewer
-- **🌙 Dark Mode** — Automatic system dark mode support
+- **🔍 Event Search** — Search through 168+ unique event types with instant filtering
+- **🗂️ File Info** — Raw metadata viewer with all device diagnostics
+
+### Data Analysis
+- **🔋 Power Analytics** — Battery states, charging patterns, energy consumption metrics
+- **🧠 Memory Insights** — Jetsam process kills, memory pressure events, top killed apps
+- **🔔 Notification Stats** — Total notifications, urgent vs non-urgent breakdown, action counts
+- **🛡️ Security Dashboard** — Suspicious visit tracking, threat detection metrics
+- **📝 AI Summarization** — Summarization pipeline stats, error tracking, exit reasons
+- **✨ Generative AI** — On-device AI model inference events and performance
+
+### UI/UX
+- **🌙 Dark Mode** — Automatic system dark mode support with seamless transitions
 - **📱 iOS-native UI** — SF-style fonts, iOS cards, tab bar, blur headers
+- **📊 Visual Charts** — Progress bars, percentage breakdowns, event distribution
+- **🔄 Real-time Updates** — Instant category switching without page reloads
+
+### Technical
+- **⚡ Fast Parsing** — Line-by-line JSON parsing for large `.ips` files
+- **📦 Offline Support** — Works entirely offline after initial load
+- **🔧 TypeScript** — Fully typed codebase for reliability
 
 ## Categories Analyzed
 
