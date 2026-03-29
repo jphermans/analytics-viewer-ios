@@ -25,7 +25,7 @@
     <key>UILaunchStoryboardName</key>
     <string>LaunchScreen</string>
     <key>UIMainStoryboardFile</key>
-    <string>AppDelegate</string>
+    <string>Main</string>
     <key>UIRequiredDeviceCapabilities</key>
     <array>
         <string>armv7</string>
@@ -92,17 +92,5 @@
             </array>
         </dict>
     </array>
-    <!-- Support sharing files to the app -->
-    <key>NSExtension</key>
-    <dict>
-        <key>NSExtensionAttributes</key>
-        <dict>
-            <key>NSExtensionActivationRule</key>
-            <dict>
-                <key>NSExtensionActivationSupportsFileWithMaxCount</key>
-                <integer>1</integer>
-            </dict>
-        </dict>
-    </dict>
 </dict>
 </plist>

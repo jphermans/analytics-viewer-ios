@@ -19,12 +19,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        return CAPBridge.handleContinueActivity(userActivity)
+        return CAPBridge.handleContinueActivity(userActivity, restorationHandler)
     }
 
     private func notifyWebLayer(fileURL: URL) {
         // Access security-scoped resource (needed for Files app / share sheet)
-        let accessing = url.startAccessingSecurityScopedResource()
+        let accessing = fileURL.startAccessingSecurityScopedResource()
         defer { if accessing { fileURL.stopAccessingSecurityScopedResource() } }
 
         guard let data = try? Data(contentsOf: fileURL) else { return }
