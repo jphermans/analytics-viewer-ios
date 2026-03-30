@@ -273,10 +273,22 @@
           <!-- Quick Summary Cards -->
           <div class="section-subtitle">Quick Summary</div>
 
+          <!-- Notifications Card with Pie Chart Visualization -->
           <div class="ios-card fade-in" @click="openCategory('Notifications')" style="cursor: pointer;">
             <div class="ios-card-header" style="justify-content: space-between;">
               <span style="display: flex; align-items: center; gap: 8px;">🔔 Notifications</span>
               <span class="badge" style="background: rgba(255,59,48,0.1); color: #FF3B30;">{{ data.summary.totalNotifications }}</span>
+            </div>
+            <!-- Visual: Urgent vs Non-Urgent Bar -->
+            <div v-if="data.summary.totalNotifications > 0" style="margin: 12px 0;">
+              <div style="display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--bg-card-secondary);">
+                <div :style="{ width: (data.summary.urgentNotifications / data.summary.totalNotifications * 100) + '%', background: '#FF3B30' }"></div>
+                <div :style="{ width: (data.summary.nonUrgentNotifications / data.summary.totalNotifications * 100) + '%', background: '#8E8E93' }"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 11px;">
+                <span style="color: #FF3B30;">🔴 {{ Math.round(data.summary.urgentNotifications / data.summary.totalNotifications * 100) }}%</span>
+                <span style="color: #8E8E93;">⚪ {{ Math.round(data.summary.nonUrgentNotifications / data.summary.totalNotifications * 100) }}%</span>
+              </div>
             </div>
             <div class="ios-card-row">
               <span class="label">Urgent</span>
@@ -286,58 +298,171 @@
               <span class="label">Non-urgent</span>
               <span class="value">{{ data.summary.nonUrgentNotifications }}</span>
             </div>
+            <div v-if="Object.keys(data.summary.notificationActions).length > 0" style="margin-top: 8px; padding-top: 8px; border-top: 0.5px solid var(--separator);">
+              <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 6px;">Top Actions</div>
+              <div v-for="(count, action) in topNotificationActions" :key="action" class="ios-card-row" style="padding: 4px 0;">
+                <span class="label" style="font-size: 12px;">{{ action }}</span>
+                <span class="value" style="font-size: 12px;">{{ count }}</span>
+              </div>
+            </div>
           </div>
 
+          <!-- Memory/Jetsam Card with Process Chart -->
           <div class="ios-card fade-in" @click="openCategory('Memory (Jetsam)')" style="cursor: pointer;">
             <div class="ios-card-header" style="justify-content: space-between;">
               <span style="display: flex; align-items: center; gap: 8px;">🧠 Memory Management</span>
               <span class="badge" style="background: rgba(255,149,0,0.1); color: #FF9500;">{{ data.summary.totalJetsamKills }} kills</span>
             </div>
-            <div v-for="(proc, i) in data.summary.jetsamTopProcesses.slice(0, 5)" :key="i" class="ios-card-row">
-              <span class="label" style="font-family: monospace; font-size: 14px;">{{ proc.name }}</span>
-              <span class="value" style="color: #FF9500;">×{{ proc.count }}</span>
+            <!-- Visual: Top processes bar chart -->
+            <div v-if="data.summary.jetsamTopProcesses.length > 0" style="margin: 12px 0;">
+              <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 8px;">Top Processes (by kill count)</div>
+              <div v-for="(proc, i) in data.summary.jetsamTopProcesses.slice(0, 5)" :key="i" style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                <span style="font-size: 11px; color: var(--text-tertiary); width: 16px;">{{ i + 1 }}</span>
+                <div style="flex: 1; height: 6px; background: var(--bg-card-secondary); border-radius: 3px; overflow: hidden;">
+                  <div :style="{ width: (proc.count / data.summary.jetsamTopProcesses[0].count * 100) + '%', background: i < 3 ? '#FF9500' : '#8E8E93' }"></div>
+                </div>
+                <span style="font-size: 11px; font-family: monospace; max-width: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ proc.name }}</span>
+                <span style="font-size: 11px; color: #FF9500; min-width: 30px; text-align: right;">{{ proc.count }}</span>
+              </div>
+            </div>
+            <!-- Kill Reasons Visualization -->
+            <div v-if="Object.keys(data.summary.jetsamReasons).length > 0" style="margin-top: 8px; padding-top: 8px; border-top: 0.5px solid var(--separator);">
+              <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 6px;">Kill Reasons</div>
+              <div v-for="(count, reason) in data.summary.jetsamReasons" :key="reason" class="ios-card-row" style="padding: 4px 0;">
+                <span class="label" style="font-size: 12px;">{{ reason }}</span>
+                <span class="value" style="font-size: 12px; color: #FF9500;">{{ count }}</span>
+              </div>
             </div>
           </div>
 
+          <!-- AI Summarization Card with Error Rate -->
           <div class="ios-card fade-in" @click="openCategory('Summarization')" style="cursor: pointer;">
             <div class="ios-card-header" style="justify-content: space-between;">
               <span style="display: flex; align-items: center; gap: 8px;">📝 AI Summarization</span>
               <span class="badge" style="background: rgba(88,86,214,0.1); color: #5856D6;">{{ data.summary.summarizationTotal }}</span>
+            </div>
+            <!-- Visual: Error Rate -->
+            <div v-if="data.summary.summarizationTotal > 0" style="margin: 12px 0;">
+              <div style="display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--bg-card-secondary);">
+                <div :style="{ width: ((data.summary.summarizationTotal - data.summary.summarizationErrors) / data.summary.summarizationTotal * 100) + '%', background: '#34C759' }"></div>
+                <div :style="{ width: (data.summary.summarizationErrors / data.summary.summarizationTotal * 100) + '%', background: '#FF3B30' }"></div>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-top: 4px; font-size: 11px;">
+                <span style="color: #34C759;">✅ {{ Math.round((data.summary.summarizationTotal - data.summary.summarizationErrors) / data.summary.summarizationTotal * 100) }}% success</span>
+                <span style="color: #FF3B30;">❌ {{ Math.round(data.summary.summarizationErrors / data.summary.summarizationTotal * 100) }}% errors</span>
+              </div>
             </div>
             <div class="ios-card-row">
               <span class="label">Total Attempts</span>
               <span class="value">{{ data.summary.summarizationTotal }}</span>
             </div>
             <div class="ios-card-row">
+              <span class="label">Successful</span>
+              <span class="value" style="color: #34C759;">{{ data.summary.summarizationTotal - data.summary.summarizationErrors }}</span>
+            </div>
+            <div class="ios-card-row">
               <span class="label">Errors</span>
               <span class="value" :style="{ color: data.summary.summarizationErrors > 0 ? '#FF3B30' : '#34C759' }">{{ data.summary.summarizationErrors }}</span>
             </div>
+            <!-- Exit Reasons -->
+            <div v-if="Object.keys(data.summary.summarizationExitReasons).length > 0" style="margin-top: 8px; padding-top: 8px; border-top: 0.5px solid var(--separator);">
+              <div style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 6px;">Exit Reasons</div>
+              <div v-for="(count, reason) in data.summary.summarizationExitReasons" :key="reason" class="ios-card-row" style="padding: 4px 0;">
+                <span class="label" style="font-size: 12px;">{{ reason }}</span>
+                <span class="value" style="font-size: 12px;">{{ count }}</span>
+              </div>
+            </div>
           </div>
 
+          <!-- Security Card with Threat Visualization -->
           <div class="ios-card fade-in" @click="openCategory('Security')" style="cursor: pointer;">
             <div class="ios-card-header" style="justify-content: space-between;">
               <span style="display: flex; align-items: center; gap: 8px;">🛡️ Security</span>
-              <span class="badge" style="background: rgba(255,45,85,0.1); color: #FF2D55;">{{ securityScore }}</span>
+              <span class="badge" :style="{ background: securityTotal > 0 ? 'rgba(255,45,85,0.1)' : 'rgba(52,199,89,0.1)', color: securityTotal > 0 ? '#FF2D55' : '#34C759' }">{{ securityScore }}</span>
+            </div>
+            <!-- Visual: Threat Level Indicator -->
+            <div v-if="securityTotal > 0" style="margin: 12px 0;">
+              <div style="display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--bg-card-secondary);">
+                <div v-if="data.summary.securitySuspiciousVisits > 0" :style="{ width: (data.summary.securitySuspiciousVisits / securityTotal * 100) + '%', background: '#FF3B30' }"></div>
+                <div v-if="data.summary.securitySuspiciousGeneral > 0" :style="{ width: (data.summary.securitySuspiciousGeneral / securityTotal * 100) + '%', background: '#FF9500' }"></div>
+                <div v-if="data.summary.securitySuspiciousOther > 0" :style="{ width: (data.summary.securitySuspiciousOther / securityTotal * 100) + '%', background: '#FFCC00' }"></div>
+              </div>
             </div>
             <div class="ios-card-row">
-              <span class="label">Suspicious Visits</span>
-              <span class="value">{{ data.summary.securitySuspiciousVisits }}</span>
+              <span class="label">🔴 Suspicious Visits</span>
+              <span class="value" :style="{ color: data.summary.securitySuspiciousVisits > 0 ? '#FF3B30' : 'inherit' }">{{ data.summary.securitySuspiciousVisits }}</span>
             </div>
             <div class="ios-card-row">
-              <span class="label">Suspicious General</span>
-              <span class="value">{{ data.summary.securitySuspiciousGeneral }}</span>
+              <span class="label">🟠 General Suspicious</span>
+              <span class="value" :style="{ color: data.summary.securitySuspiciousGeneral > 0 ? '#FF9500' : 'inherit' }">{{ data.summary.securitySuspiciousGeneral }}</span>
+            </div>
+            <div class="ios-card-row">
+              <span class="label">🟡 Other Suspicious</span>
+              <span class="value" :style="{ color: data.summary.securitySuspiciousOther > 0 ? '#FFCC00' : 'inherit' }">{{ data.summary.securitySuspiciousOther }}</span>
             </div>
           </div>
 
+          <!-- Generative AI & Stability Card -->
           <div class="ios-card fade-in">
             <div class="ios-card-header">✨ Generative AI &amp; Intelligence</div>
+            <!-- AI Events Visualization -->
+            <div style="margin: 12px 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="label">AI Events</span>
+                <span class="value" style="color: #AF52DE; font-weight: 600;">{{ data.summary.generativeAIEvents }}</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" :style="{ width: Math.min(100, data.summary.generativeAIEvents / 100) + '%', background: '#AF52DE' }"></div>
+              </div>
+            </div>
+            <!-- Stability Visualization -->
+            <div style="margin-top: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span class="label">Stability Heartbeats</span>
+                <span class="value" :style="{ color: data.summary.stabilityHeartbeats > 100 ? '#34C759' : '#FF9500' }">{{ data.summary.stabilityHeartbeats }}</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" :style="{ width: Math.min(100, data.summary.stabilityHeartbeats / 200 * 100) + '%', background: data.summary.stabilityHeartbeats > 100 ? '#34C759' : '#FF9500' }"></div>
+              </div>
+              <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 4px;">{{ data.summary.stabilityHeartbeats > 100 ? '✅ System stable' : '⚠️ Low stability' }}</div>
+            </div>
+          </div>
+
+          <!-- Connectivity & Device Card -->
+          <div class="ios-card fade-in" @click="openCategory('Connectivity')" style="cursor: pointer;">
+            <div class="ios-card-header">📶 Connectivity</div>
+            <div class="ios-card-row" v-if="data.summary.lpmStatus && data.summary.lpmStatus.length > 0">
+              <span class="label">Low Power Mode Events</span>
+              <span class="value">{{ data.summary.lpmStatus.length }}</span>
+            </div>
+            <div class="ios-card-row" v-if="data.metadata">
+              <span class="label">Wi-Fi Chipset</span>
+              <span class="value" style="font-size: 12px;">{{ data.metadata.WiFiChipset || 'N/A' }}</span>
+            </div>
+            <div class="ios-card-row" v-if="data.metadata">
+              <span class="label">Baseband</span>
+              <span class="value" style="font-size: 12px;">{{ data.metadata.basebandChipset || 'N/A' }}</span>
+            </div>
+          </div>
+
+          <!-- HomeKit & Mail & Safari Summary -->
+          <div class="ios-card fade-in">
+            <div class="ios-card-header">🏠 HomeKit · 📧 Mail · 🧭 Safari</div>
             <div class="ios-card-row">
-              <span class="label">AI Events</span>
-              <span class="value">{{ data.summary.generativeAIEvents }}</span>
+              <span class="label">🏠 HomeKit Errors</span>
+              <span class="value" :style="{ color: data.summary.homeKitErrors > 0 ? '#FF9500' : '#34C759' }">{{ data.summary.homeKitErrors }}</span>
             </div>
             <div class="ios-card-row">
-              <span class="label">Stability Score</span>
-              <span class="value">{{ data.summary.stabilityHeartbeats }} heartbeats</span>
+              <span class="label">🏠 HomeKit Notifications</span>
+              <span class="value">{{ data.summary.homeKitNotifications }}</span>
+            </div>
+            <div class="ios-card-row">
+              <span class="label">📧 Mail Events</span>
+              <span class="value">{{ data.summary.mailEvents }}</span>
+            </div>
+            <div class="ios-card-row">
+              <span class="label">🧭 Safari Events</span>
+              <span class="value">{{ data.summary.safariEvents }}</span>
             </div>
           </div>
 
@@ -559,6 +684,22 @@ const securityScore = computed(() => {
   const total = s.securitySuspiciousVisits + s.securitySuspiciousGeneral + s.securitySuspiciousOther
   if (total === 0) return '✅ No Issues'
   return `⚠️ ${total} flags`
+})
+
+const securityTotal = computed(() => {
+  if (!data.value) return 0
+  const s = data.value.summary
+  return s.securitySuspiciousVisits + s.securitySuspiciousGeneral + s.securitySuspiciousOther || 1
+})
+
+const topNotificationActions = computed(() => {
+  if (!data.value?.summary?.notificationActions) return {}
+  const actions = data.value.summary.notificationActions
+  // Sort by count and return top 3
+  return Object.entries(actions)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3)
+    .reduce((acc, [key, val]) => { acc[key] = val; return acc }, {} as Record<string, number>)
 })
 
 const fileSizeFormatted = computed(() => {
