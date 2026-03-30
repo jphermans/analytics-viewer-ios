@@ -23,7 +23,9 @@ A professional iOS app built with **Capacitor + Vue 3 + Vite** that parses and s
 ### UI/UX
 - **🌙 Dark Mode** — Automatic system dark mode support with seamless transitions
 - **📱 iOS-native UI** — SF-style fonts, iOS cards, tab bar, blur headers
-- **📊 Visual Charts** — Progress bars, percentage breakdowns, event distribution
+- **📊 Visual Charts** — Progress bars, gauges, pie charts, event distribution
+- **🎨 Modern Design** — Gradient effects, enhanced shadows, smooth hover animations
+- **📏 Improved Spacing** — Comfortable card layouts with generous padding
 - **🔄 Real-time Updates** — Instant category switching without page reloads
 
 ### Technical
