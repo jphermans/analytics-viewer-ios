@@ -1,26 +1,105 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#007AFF"/>
-      <stop offset="100%" style="stop-color:#5856D6"/>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1A1A2E"/>
+      <stop offset="50%" stop-color="#16213E"/>
+      <stop offset="100%" stop-color="#0F3460"/>
     </linearGradient>
-    <linearGradient id="bar1" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.7"/>
-      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:1"/>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00B4D8"/>
+      <stop offset="100%" stop-color="#0077B6"/>
     </linearGradient>
+    <linearGradient id="barGrad1" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#00B4D8"/>
+      <stop offset="100%" stop-color="#48CAE4"/>
+    </linearGradient>
+    <linearGradient id="barGrad2" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#0077B6"/>
+      <stop offset="100%" stop-color="#00B4D8"/>
+    </linearGradient>
+    <linearGradient id="barGrad3" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#023E8A"/>
+      <stop offset="100%" stop-color="#0077B6"/>
+    </linearGradient>
+    <linearGradient id="lensGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#48CAE4" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0077B6" stop-opacity="0.1"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    <clipPath id="roundedClip">
+      <rect width="1024" height="1024" rx="224" ry="224"/>
+    </clipPath>
   </defs>
-  <!-- Background -->
-  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
-  <!-- Chart bars -->
-  <rect x="96" y="296" width="56" height="120" rx="12" fill="url(#bar1)"/>
-  <rect x="176" y="216" width="56" height="200" rx="12" fill="url(#bar1)"/>
-  <rect x="256" y="256" width="56" height="160" rx="12" fill="url(#bar1)"/>
-  <rect x="336" y="176" width="56" height="240" rx="12" fill="url(#bar1)"/>
-  <!-- Trend line -->
-  <polyline points="124,270 204,196 284,230 364,150" fill="none" stroke="#FFD60A" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-  <!-- Dots -->
-  <circle cx="124" cy="270" r="10" fill="#FFD60A"/>
-  <circle cx="204" cy="196" r="10" fill="#FFD60A"/>
-  <circle cx="284" cy="230" r="10" fill="#FFD60A"/>
-  <circle cx="364" cy="150" r="10" fill="#FFD60A"/>
+
+  <!-- Background with rounded corners -->
+  <rect width="1024" height="1024" rx="224" ry="224" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.05" clip-path="url(#roundedClip)">
+    <line x1="0" y1="256" x2="1024" y2="256" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="512" x2="1024" y2="512" stroke="white" stroke-width="1"/>
+    <line x1="0" y1="768" x2="1024" y2="768" stroke="white" stroke-width="1"/>
+    <line x1="256" y1="0" x2="256" y2="1024" stroke="white" stroke-width="1"/>
+    <line x1="512" y1="0" x2="512" y2="1024" stroke="white" stroke-width="1"/>
+    <line x1="768" y1="0" x2="768" y2="1024" stroke="white" stroke-width="1"/>
+  </g>
+
+  <!-- Document / Card background -->
+  <rect x="140" y="180" width="520" height="620" rx="40" ry="40" fill="#0D1B2A" opacity="0.6" filter="url(#shadow)"/>
+  <rect x="140" y="180" width="520" height="620" rx="40" ry="40" fill="none" stroke="#1B3A5C" stroke-width="2"/>
+
+  <!-- Card header line -->
+  <rect x="200" y="230" width="180" height="12" rx="6" fill="#1B3A5C"/>
+  <rect x="200" y="260" width="120" height="8" rx="4" fill="#1B3A5C" opacity="0.5"/>
+
+  <!-- Chart bars on the document -->
+  <rect x="200" y="560" width="60" height="120" rx="8" fill="url(#barGrad3)" filter="url(#shadow)"/>
+  <rect x="280" y="480" width="60" height="200" rx="8" fill="url(#barGrad2)" filter="url(#shadow)"/>
+  <rect x="360" y="400" width="60" height="280" rx="8" fill="url(#barGrad1)" filter="url(#shadow)"/>
+  <rect x="440" y="340" width="60" height="340" rx="8" fill="url(#barGrad2)" filter="url(#shadow)"/>
+  <rect x="520" y="430" width="60" height="250" rx="8" fill="url(#barGrad3)" filter="url(#shadow)"/>
+
+  <!-- Trend line on chart -->
+  <polyline points="230,540 310,460 390,380 470,320 550,410" fill="none" stroke="#48CAE4" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" opacity="0.8"/>
+
+  <!-- Trend line dots -->
+  <circle cx="230" cy="540" r="8" fill="#48CAE4" filter="url(#glow)"/>
+  <circle cx="310" cy="460" r="8" fill="#48CAE4" filter="url(#glow)"/>
+  <circle cx="390" cy="380" r="8" fill="#48CAE4" filter="url(#glow)"/>
+  <circle cx="470" cy="320" r="8" fill="#48CAE4" filter="url(#glow)"/>
+  <circle cx="550" cy="410" r="8" fill="#48CAE4" filter="url(#glow)"/>
+
+  <!-- Magnifying glass -->
+  <g transform="translate(580, 520) rotate(-30)">
+    <!-- Lens -->
+    <circle cx="0" cy="0" r="160" fill="url(#lensGrad)" stroke="#48CAE4" stroke-width="8" filter="url(#shadow)"/>
+    <circle cx="0" cy="0" r="140" fill="none" stroke="#48CAE4" stroke-width="2" opacity="0.3"/>
+    <!-- Lens shine -->
+    <ellipse cx="-40" cy="-50" rx="60" ry="30" fill="white" opacity="0.08" transform="rotate(-20)"/>
+    <!-- Handle -->
+    <line x1="120" y1="120" x2="240" y2="240" stroke="#48CAE4" stroke-width="28" stroke-linecap="round" filter="url(#shadow)"/>
+    <line x1="120" y1="120" x2="240" y2="240" stroke="#00B4D8" stroke-width="20" stroke-linecap="round"/>
+  </g>
+
+  <!-- Checkmark inside magnifying glass -->
+  <g transform="translate(540, 490)" filter="url(#glow)">
+    <polyline points="-20,0 -5,15 25,-20" fill="none" stroke="#48CAE4" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Accent dots (data points feel) -->
+  <circle cx="180" cy="380" r="4" fill="#48CAE4" opacity="0.4"/>
+  <circle cx="195" cy="420" r="3" fill="#0077B6" opacity="0.3"/>
+  <circle cx="175" cy="450" r="5" fill="#023E8A" opacity="0.3"/>
+
+  <!-- Bottom glow effect -->
+  <ellipse cx="512" cy="920" rx="300" ry="40" fill="#00B4D8" opacity="0.08"/>
 </svg>
