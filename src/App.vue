@@ -645,6 +645,16 @@
               <span class="value">{{ data.deviceIds.length }}</span>
             </div>
           </div>
+
+          <!-- About Button at bottom of Overview tab -->
+          <div style="padding: 24px 20px;">
+            <button
+              @click="activeTab = 'about'"
+              style="width: 100%; padding: 16px; border-radius: 14px; border: none; background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%); color: white; font-size: 17px; font-weight: 600; cursor: pointer;"
+            >
+              ℹ️ About
+            </button>
+          </div>
         </div>
 
         <!-- Categories Tab -->
@@ -748,13 +758,19 @@
             </div>
           </div>
 
-          <!-- Open new file -->
-          <div style="padding: 24px 16px;">
+          <!-- Open new file and About buttons at bottom -->
+          <div style="padding: 24px 20px;">
             <button
               @click="resetFile"
-              style="width: 100%; padding: 14px; border-radius: 12px; border: none; background: #FF3B30; color: white; font-size: 16px; font-weight: 600; cursor: pointer;"
+              style="width: 100%; padding: 16px; border-radius: 14px; border: none; background: #FF3B30; color: white; font-size: 17px; font-weight: 600; cursor: pointer; margin-bottom: 12px;"
             >
-              Open Another File
+              📂 Open Another File
+            </button>
+            <button
+              @click="activeTab = 'about'"
+              style="width: 100%; padding: 16px; border-radius: 14px; border: none; background: linear-gradient(135deg, #007AFF 0%, #5856D6 100%); color: white; font-size: 17px; font-weight: 600; cursor: pointer;"
+            >
+              ℹ️ About
             </button>
           </div>
         </div>
